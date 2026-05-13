@@ -1,0 +1,69 @@
+# =============================================================================
+# docker-compose.dev.yml  —  Development overrides
+# Usage:  docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+# =============================================================================
+
+version: "3.9"
+
+services:
+  # ─── Backend (hot-reload with nodemon) ───────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+      target: development          # use a dev stage if Dockerfile has one
+    command: npm run dev            # nodemon src/app.js
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./backend/src:/app/src:delegated
+      - ./backend/prisma:/app/prisma:delegated
+      - ./backend/package.json:/app/package.json:ro
+      # Preserve container node_modules — do NOT overwrite with host folder
+      - /app/node_modules
+    ports:
+      - "3001:3001"                 # direct access for Postman / curl
+      - "9229:9229"                 # Node.js inspector (--inspect)
+
+  # ─── Frontend (Next.js dev server with HMR) ──────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+      target: development
+    command: npm run dev
+    environment:
+      NODE_ENV: development
+      NEXT_TELEMETRY_DISABLED: "1"
+      WATCHPACK_POLLING: "true"     # required inside Docker on some hosts
+    volumes:
+      - ./frontend/app:/app/app:delegated
+      - ./frontend/public:/app/public:delegated
+      - ./frontend/package.json:/app/package.json:ro
+      - ./frontend/next.config.ts:/app/next.config.ts:ro
+      - ./frontend/tsconfig.json:/app/tsconfig.json:ro
+      - ./frontend/postcss.config.mjs:/app/postcss.config.mjs:ro
+      - /app/node_modules
+      - /app/.next
+    ports:
+      - "3000:3000"                 # direct access for browser dev
+
+  # ─── PostgreSQL (expose for direct DB tool access) ───────────────────────
+  postgres:
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: iptv_user
+      POSTGRES_PASSWORD: iptv_password
+      POSTGRES_DB: iptv_db
+
+  # ─── Redis (expose for redis-cli / RedisInsight) ──────────────────────────
+  redis:
+    ports:
+      - "6379:6379"
+
+  # ─── NGINX (keep same ports, no SSL required in dev) ─────────────────────
+  nginx:
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/conf.d:/etc/nginx/conf.d:ro

@@ -1,0 +1,312 @@
+// Prisma Schema for IPTV Streaming Platform
+// PostgreSQL database
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────
+
+enum UserRole {
+  SUPER_ADMIN
+  ADMIN
+  RESELLER
+  USER
+  GUEST
+}
+
+enum UserStatus {
+  ACTIVE
+  SUSPENDED
+  EXPIRED
+  PENDING
+  BANNED
+}
+
+enum DnsStatus {
+  ONLINE
+  OFFLINE
+  CHECKING
+  UNKNOWN
+}
+
+enum StreamType {
+  LIVE
+  MOVIE
+  SERIES
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  EXPIRED
+  CANCELLED
+  TRIAL
+  PENDING
+}
+
+enum SubscriptionPlan {
+  FREE
+  BASIC
+  STANDARD
+  PREMIUM
+  RESELLER
+}
+
+// ─────────────────────────────────────────────
+// Models
+// ─────────────────────────────────────────────
+
+model User {
+  id              String    @id @default(uuid())
+  email           String?   @unique
+  username        String    @unique
+  password_hash   String
+  role            UserRole  @default(USER)
+  status          UserStatus @default(ACTIVE)
+  display_name    String?
+  avatar_url      String?
+  max_connections Int       @default(1)
+  is_trial        Boolean   @default(false)
+  trial_expires_at DateTime?
+  expires_at      DateTime?
+  notes           String?
+  created_by      String?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  // Relations
+  profiles        Profile[]
+  sessions        Session[]
+  access_codes    AccessCode[]
+  subscription    Subscription?
+  created_users   User[]    @relation("CreatedBy")
+  creator         User?     @relation("CreatedBy", fields: [created_by], references: [id])
+
+  @@index([email])
+  @@index([username])
+  @@index([role])
+  @@index([status])
+}
+
+model Profile {
+  id              String    @id @default(uuid())
+  user_id         String
+  name            String
+  avatar          String?
+  pin             String?   // hashed pin
+  is_adult_locked Boolean   @default(false)
+  is_default      Boolean   @default(false)
+  language        String?   @default("en")
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  // Relations
+  user            User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+  favorites       Favorite[]
+  watch_history   WatchHistory[]
+
+  @@index([user_id])
+}
+
+model DnsProvider {
+  id              String    @id @default(uuid())
+  name            String
+  url             String
+  username        String
+  password        String
+  nickname        String?
+  status          DnsStatus @default(UNKNOWN)
+  priority        Int       @default(0)
+  is_active       Boolean   @default(true)
+  last_check      DateTime?
+  last_error      String?
+  response_time   Int?      // ms
+  server_info     Json?     // cached server_info from Xtream API
+  streams_count   Int       @default(0)
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  // Relations
+  streams         Stream[]
+  categories      Category[]
+
+  @@index([status])
+  @@index([priority])
+  @@index([is_active])
+}
+
+model Category {
+  id              String    @id @default(uuid())
+  dns_provider_id String
+  category_id     String    // original ID from provider
+  name            String
+  type            StreamType
+  parent_id       String?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  // Relations
+  dns_provider    DnsProvider @relation(fields: [dns_provider_id], references: [id], onDelete: Cascade)
+  streams         Stream[]
+
+  @@unique([dns_provider_id, category_id, type])
+  @@index([dns_provider_id])
+  @@index([type])
+}
+
+model Stream {
+  id              String    @id @default(uuid())
+  dns_provider_id String
+  stream_id       String    // original stream ID from provider
+  name            String
+  type            StreamType
+  category_id     String?
+  stream_url      String?   // cached direct URL (optional)
+  logo            String?
+  epg_channel_id  String?
+  num             Int?
+  added           String?   // unix timestamp when added to provider
+  rating          Float?
+  rating_5based   Float?
+  container_extension String? // for VOD: mp4, mkv, etc.
+  is_active       Boolean   @default(true)
+  last_synced     DateTime?
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+
+  // Relations
+  dns_provider    DnsProvider @relation(fields: [dns_provider_id], references: [id], onDelete: Cascade)
+  category        Category?   @relation(fields: [category_id], references: [id], onDelete: SetNull)
+  favorites       Favorite[]
+  watch_history   WatchHistory[]
+  epg_programs    EpgProgram[]
+
+  @@unique([dns_provider_id, stream_id, type])
+  @@index([dns_provider_id])
+  @@index([type])
+  @@index([category_id])
+  @@index([name])
+  @@index([epg_channel_id])
+}
+
+model Favorite {
+  id          String    @id @default(uuid())
+  profile_id  String
+  stream_id   String
+  added_at    DateTime  @default(now())
+
+  // Relations
+  profile     Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  stream      Stream    @relation(fields: [stream_id], references: [id], onDelete: Cascade)
+
+  @@unique([profile_id, stream_id])
+  @@index([profile_id])
+}
+
+model WatchHistory {
+  id          String    @id @default(uuid())
+  profile_id  String
+  stream_id   String
+  progress    Float     @default(0)  // seconds
+  duration    Float?    // total duration seconds
+  watched_at  DateTime  @default(now())
+  updated_at  DateTime  @updatedAt
+  is_finished Boolean   @default(false)
+
+  // Relations
+  profile     Profile   @relation(fields: [profile_id], references: [id], onDelete: Cascade)
+  stream      Stream    @relation(fields: [stream_id], references: [id], onDelete: Cascade)
+
+  @@unique([profile_id, stream_id])
+  @@index([profile_id])
+  @@index([watched_at])
+}
+
+model Session {
+  id          String    @id @default(uuid())
+  user_id     String
+  device_id   String?
+  device_name String?
+  ip_address  String?
+  user_agent  String?
+  token       String    @unique  // refresh token hash
+  is_revoked  Boolean   @default(false)
+  created_at  DateTime  @default(now())
+  expires_at  DateTime
+  last_used   DateTime  @default(now())
+
+  // Relations
+  user        User      @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([user_id])
+  @@index([token])
+  @@index([expires_at])
+}
+
+model AccessCode {
+  id          String    @id @default(uuid())
+  code        String    @unique
+  user_id     String?
+  label       String?
+  expires_at  DateTime
+  max_uses    Int       @default(1)
+  uses_count  Int       @default(0)
+  is_active   Boolean   @default(true)
+  created_by  String?
+  created_at  DateTime  @default(now())
+
+  // Relations
+  user        User?     @relation(fields: [user_id], references: [id], onDelete: SetNull)
+
+  @@index([code])
+  @@index([expires_at])
+}
+
+model Subscription {
+  id          String             @id @default(uuid())
+  user_id     String             @unique
+  plan        SubscriptionPlan   @default(FREE)
+  status      SubscriptionStatus @default(ACTIVE)
+  started_at  DateTime           @default(now())
+  expires_at  DateTime?
+  max_streams Int                @default(1)
+  auto_renew  Boolean            @default(false)
+  notes       String?
+  created_at  DateTime           @default(now())
+  updated_at  DateTime           @updatedAt
+
+  // Relations
+  user        User               @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([expires_at])
+}
+
+model EpgProgram {
+  id          String    @id @default(uuid())
+  channel_id  String
+  stream_id   String?
+  title       String
+  description String?
+  start_time  DateTime
+  end_time    DateTime
+  category    String?
+  lang        String?   @default("en")
+  icon        String?
+  created_at  DateTime  @default(now())
+
+  // Relations
+  stream      Stream?   @relation(fields: [stream_id], references: [id], onDelete: SetNull)
+
+  @@index([channel_id])
+  @@index([start_time])
+  @@index([end_time])
+  @@index([stream_id])
+}
