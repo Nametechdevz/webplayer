@@ -26,11 +26,11 @@ const apiLimiter = rateLimit({
 });
 
 /**
- * Strict limiter for auth endpoints: 20 req / 15 min per IP
+ * Strict limiter for auth endpoints: 200 req / 15 min per IP
  */
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
-  max: 20,
+  max: 200,
   standardHeaders: true,
   legacyHeaders: false,
   message: {
