@@ -105,7 +105,7 @@ export default function Header() {
                     >
                       <User size={16} /> Profile
                     </Link>
-                    {user?.role === 'admin' && (
+                    {['SUPER_ADMIN', 'ADMIN', 'admin', 'super_admin'].includes(user?.role || '') && (
                       <Link
                         href="/admin"
                         className="flex items-center gap-3 px-4 py-2.5 text-[#a0a0b0] hover:text-white hover:bg-[rgba(255,255,255,0.05)] transition-colors text-sm"

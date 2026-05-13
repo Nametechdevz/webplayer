@@ -116,7 +116,7 @@ export default function Sidebar() {
 
       {/* User & Actions */}
       <div className="border-t border-[rgba(255,255,255,0.06)] px-2 py-3 flex flex-col gap-1">
-        {user?.role === 'admin' && (
+        {['SUPER_ADMIN', 'ADMIN', 'admin', 'super_admin'].includes(user?.role || '') && (
           <Link href="/admin">
             <div className={cn(
               'flex items-center gap-3 px-3 py-2.5 rounded-xl transition-all duration-200 cursor-pointer text-[#a0a0b0] hover:text-white hover:bg-[rgba(255,255,255,0.05)]'

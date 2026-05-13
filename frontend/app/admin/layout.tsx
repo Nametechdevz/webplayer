@@ -28,15 +28,17 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const pathname = usePathname();
   const { user, isAuthenticated } = useAuthStore();
 
+  const isAdmin = ['SUPER_ADMIN', 'ADMIN', 'admin', 'super_admin'].includes(user?.role || '');
+
   useEffect(() => {
     if (!isAuthenticated) {
       router.push('/login');
-    } else if (user?.role !== 'admin') {
+    } else if (user && !isAdmin) {
       router.push('/home');
     }
-  }, [isAuthenticated, user, router]);
+  }, [isAuthenticated, user, isAdmin, router]);
 
-  if (!isAuthenticated || user?.role !== 'admin') return null;
+  if (!isAuthenticated || !isAdmin) return null;
 
   return (
     <div className="min-h-screen bg-[#0a0a0f] flex">
