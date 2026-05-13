@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+@source "../app/**/*.{ts,tsx,js,jsx}";
+@source "../components/**/*.{ts,tsx,js,jsx}";
+@source "../pages/**/*.{ts,tsx,js,jsx}";
+
 @theme {
   --color-bg-primary: #0a0a0f;
   --color-bg-secondary: #111118;
