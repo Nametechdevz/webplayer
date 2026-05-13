@@ -1,55 +1,88 @@
-# Dependencies
+# ── Dependencies ──────────────────────────────────────────────────────────────
 node_modules/
 .pnp
 .pnp.js
+.yarn/
 
-# Next.js
+# ── Next.js ───────────────────────────────────────────────────────────────────
 .next/
 out/
 build/
 dist/
 
-# Environment files
+# ── Environment files ─────────────────────────────────────────────────────────
+# Keep .env.example; ignore everything else
 .env
 .env.local
+.env.development
 .env.development.local
+.env.test
 .env.test.local
+.env.production
 .env.production.local
 
-# Logs
+# ── Logs ──────────────────────────────────────────────────────────────────────
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
 *.log
 logs/
+log/
 
-# Runtime data
-pids
+# ── Runtime data ──────────────────────────────────────────────────────────────
+pids/
 *.pid
 *.seed
 *.pid.lock
 
-# Database
+# ── Database & persistent storage ────────────────────────────────────────────
 *.db
 *.sqlite
+*.sqlite3
 postgres-data/
+docker-data/
+data/
 
-# OS
+# ── SSL certificates ──────────────────────────────────────────────────────────
+nginx/ssl/
+nginx/certbot/
+
+# ── OS artefacts ──────────────────────────────────────────────────────────────
 .DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
 Thumbs.db
+desktop.ini
 
-# IDE
+# ── IDE / editor ──────────────────────────────────────────────────────────────
 .vscode/
 .idea/
 *.swp
 *.swo
+*.swn
+*~
 
-# Testing
+# ── Testing & coverage ────────────────────────────────────────────────────────
 coverage/
 .nyc_output/
+*.lcov
+test-results/
 
-# Prisma
+# ── TypeScript ────────────────────────────────────────────────────────────────
+*.tsbuildinfo
+next-env.d.ts
+
+# ── Prisma generated client ───────────────────────────────────────────────────
 backend/src/generated/
+# node_modules/@prisma/client is gitignored via node_modules above
 
-# Docker
-docker-data/
+# ── Misc build artefacts ──────────────────────────────────────────────────────
+*.tgz
+*.tar.gz
+.cache/
+tmp/
+temp/
