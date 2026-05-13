@@ -1,6 +1,40 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+@theme {
+  --color-bg-primary: #0a0a0f;
+  --color-bg-secondary: #111118;
+  --color-bg-card: #16161e;
+  --color-accent-purple: #6c63ff;
+  --color-accent-red: #ff6b6b;
+  --color-text-secondary: #a0a0b0;
+
+  --animate-shimmer: shimmer 1.5s infinite;
+  --animate-fade-in: fadeIn 0.4s ease forwards;
+  --animate-slide-up: slideUp 0.4s ease forwards;
+  --animate-scale-in: scaleIn 0.3s ease forwards;
+  --animate-glow-pulse: glowPulse 2s ease-in-out infinite;
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scaleIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  @keyframes glowPulse {
+    0%, 100% { box-shadow: 0 0 10px rgba(108,99,255,0.3); }
+    50% { box-shadow: 0 0 30px rgba(108,99,255,0.7); }
+  }
+}
 
 :root {
   --bg-primary: #0a0a0f;
@@ -27,13 +61,13 @@ html {
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
-  font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-geist-sans, system-ui, -apple-system, sans-serif);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* Scrollbar */
+/* Custom scrollbar */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;
@@ -49,7 +83,7 @@ body {
   background: rgba(108, 99, 255, 0.7);
 }
 
-/* Glass effect utility */
+/* Glass effect */
 .glass {
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -65,22 +99,7 @@ body {
   background-clip: text;
 }
 
-/* Gradient border */
-.gradient-border {
-  position: relative;
-}
-.gradient-border::after {
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: linear-gradient(135deg, #6c63ff, #ff6b6b);
-  border-radius: 1px;
-}
-
-/* Hide scrollbar but keep functionality */
+/* Hide scrollbar */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
 }
@@ -89,34 +108,7 @@ body {
   scrollbar-width: none;
 }
 
-/* Custom focus ring */
-.focus-ring:focus-visible {
-  outline: 2px solid #6c63ff;
-  outline-offset: 2px;
-}
-
-/* Glow effects */
-.glow-purple {
-  box-shadow: 0 0 20px rgba(108, 99, 255, 0.4);
-}
-.glow-red {
-  box-shadow: 0 0 20px rgba(255, 107, 107, 0.4);
-}
-
-/* Video player */
-video::-webkit-media-controls {
-  display: none !important;
-}
-video::-webkit-media-controls-enclosure {
-  display: none !important;
-}
-
-/* Shimmer animation */
-@keyframes shimmer {
-  0% { background-position: -200% 0; }
-  100% { background-position: 200% 0; }
-}
-
+/* Shimmer */
 .shimmer {
   background: linear-gradient(
     90deg,
@@ -128,28 +120,46 @@ video::-webkit-media-controls-enclosure {
   animation: shimmer 1.5s infinite;
 }
 
-/* Fade in */
+/* Glow effects */
+.glow-purple {
+  box-shadow: 0 0 20px rgba(108, 99, 255, 0.4);
+}
+.glow-red {
+  box-shadow: 0 0 20px rgba(255, 107, 107, 0.4);
+}
+
+/* Video controls override */
+video::-webkit-media-controls {
+  display: none !important;
+}
+video::-webkit-media-controls-enclosure {
+  display: none !important;
+}
+
+/* Animations */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
 @keyframes fadeIn {
   from { opacity: 0; }
   to { opacity: 1; }
 }
 
-/* Slide up */
 @keyframes slideUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Scale in */
 @keyframes scaleIn {
   from { opacity: 0; transform: scale(0.95); }
   to { opacity: 1; transform: scale(1); }
 }
 
-/* Glow pulse */
 @keyframes glowPulse {
-  0%, 100% { box-shadow: 0 0 10px rgba(108, 99, 255, 0.3); }
-  50% { box-shadow: 0 0 30px rgba(108, 99, 255, 0.7); }
+  0%, 100% { box-shadow: 0 0 10px rgba(108,99,255,0.3); }
+  50% { box-shadow: 0 0 30px rgba(108,99,255,0.7); }
 }
 
 .animate-fade-in { animation: fadeIn 0.4s ease forwards; }

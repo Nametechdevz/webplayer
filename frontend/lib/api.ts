@@ -10,7 +10,6 @@ export const apiClient: AxiosInstance = axios.create({
   },
 });
 
-// ─── Request interceptor ─────────────────────────────────────────────────────
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (typeof window !== 'undefined') {
@@ -24,7 +23,6 @@ apiClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// ─── Response interceptor ────────────────────────────────────────────────────
 apiClient.interceptors.response.use(
   (response) => response,
   async (error: AxiosError) => {
@@ -37,9 +35,7 @@ apiClient.interceptors.response.use(
         const refreshToken = localStorage.getItem('refreshToken');
         if (!refreshToken) throw new Error('No refresh token');
 
-        const { data } = await axios.post(`${BASE_URL}/auth/refresh`, {
-          refreshToken,
-        });
+        const { data } = await axios.post(`${BASE_URL}/auth/refresh`, { refreshToken });
 
         localStorage.setItem('accessToken', data.accessToken);
         localStorage.setItem('refreshToken', data.refreshToken);
@@ -62,7 +58,6 @@ apiClient.interceptors.response.use(
   }
 );
 
-// ─── API methods ─────────────────────────────────────────────────────────────
 export const authApi = {
   login: (credentials: { username: string; password: string }) =>
     apiClient.post('/auth/login', credentials),

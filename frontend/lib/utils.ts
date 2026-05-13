@@ -1,11 +1,19 @@
-import { type ClassValue, clsx } from 'clsx';
+export type ClassValue =
+  | string
+  | number
+  | boolean
+  | undefined
+  | null
+  | false
+  | ClassValue[]
+  | { [key: string]: unknown };
 
-// Simple cn utility without clsx dependency (inline impl)
 export function cn(...inputs: ClassValue[]): string {
   return inputs
     .flatMap((input) => {
       if (!input) return [];
       if (typeof input === 'string') return [input];
+      if (typeof input === 'number') return [String(input)];
       if (Array.isArray(input)) return [cn(...input)];
       if (typeof input === 'object') {
         return Object.entries(input)
@@ -34,13 +42,6 @@ export function formatTime(seconds: number): string {
   return `${m}:${s.toString().padStart(2, '0')}`;
 }
 
-export function formatFileSize(bytes: number): string {
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-  return `${(bytes / (1024 * 1024 * 1024)).toFixed(1)} GB`;
-}
-
 export function formatNumber(num: number): string {
   if (num >= 1_000_000) return `${(num / 1_000_000).toFixed(1)}M`;
   if (num >= 1_000) return `${(num / 1_000).toFixed(1)}K`;
@@ -66,13 +67,6 @@ export function truncate(str: string, maxLength: number): string {
   return str.slice(0, maxLength) + '…';
 }
 
-export function slugify(str: string): string {
-  return str
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/(^-|-$)/g, '');
-}
-
 export function getImageUrl(path?: string, fallback = '/placeholder.jpg'): string {
   if (!path) return fallback;
   if (path.startsWith('http')) return path;
@@ -90,5 +84,17 @@ export function debounce<T extends (...args: unknown[]) => unknown>(
   };
 }
 
-// Simple clsx replacement if not installed
-type ClassValue = string | number | boolean | undefined | null | { [key: string]: unknown } | ClassValue[];
+export function formatRelativeTime(dateString: string): string {
+  const date = new Date(dateString);
+  const now = new Date();
+  const diffMs = now.getTime() - date.getTime();
+  const diffMins = Math.floor(diffMs / 60000);
+  const diffHours = Math.floor(diffMins / 60);
+  const diffDays = Math.floor(diffHours / 24);
+
+  if (diffMins < 1) return 'Just now';
+  if (diffMins < 60) return `${diffMins}m ago`;
+  if (diffHours < 24) return `${diffHours}h ago`;
+  if (diffDays < 7) return `${diffDays}d ago`;
+  return date.toLocaleDateString();
+}

@@ -67,7 +67,7 @@ export const useAuthStore = create<AuthState>()(
               getItem: () => null,
               setItem: () => {},
               removeItem: () => {},
-            } as Storage)
+            } as unknown as Storage)
       ),
       partialize: (state) => ({
         user: state.user,

@@ -43,7 +43,7 @@ export interface BaseContent {
 
 export interface Movie extends BaseContent {
   type: 'movie';
-  duration?: number; // minutes
+  duration?: number;
   streamUrl?: string;
   trailerUrl?: string;
   director?: string;
@@ -99,8 +99,8 @@ export interface EPGProgram {
   channelId: string;
   title: string;
   description?: string;
-  startTime: string; // ISO string
-  endTime: string;   // ISO string
+  startTime: string;
+  endTime: string;
   category?: string;
   thumbnail?: string;
   rating?: string;
@@ -167,8 +167,8 @@ export interface AdminStats {
   totalChannels: number;
   totalMovies: number;
   totalSeries: number;
-  bandwidth: number; // Mbps
-  uptime: number; // percentage
+  bandwidth: number;
+  uptime: number;
   dnsStatus: 'healthy' | 'degraded' | 'down';
 }
 
@@ -234,7 +234,7 @@ export interface WatchHistoryItem {
   contentType: ContentType;
   title: string;
   poster?: string;
-  progress: number; // 0-100
+  progress: number;
   duration?: number;
   lastWatched: string;
   episodeInfo?: {

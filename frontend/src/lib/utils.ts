@@ -4,6 +4,7 @@ export type ClassValue =
   | boolean
   | undefined
   | null
+  | false
   | ClassValue[]
   | { [key: string]: unknown };
 
