@@ -12,7 +12,7 @@ WORKDIR /app
 RUN apk add --no-cache python3 make g++ openssl
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY . .
 
@@ -34,7 +34,7 @@ RUN apk add --no-cache openssl
 
 # Copy manifests and install production deps only
 COPY package*.json ./
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm install --omit=dev && npm cache clean --force
 
 # Copy source
 COPY . .

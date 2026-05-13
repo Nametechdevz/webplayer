@@ -9,7 +9,7 @@ FROM node:20-alpine AS development
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY . .
 
@@ -24,7 +24,7 @@ WORKDIR /app
 
 # Install all deps (including devDependencies needed for build)
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY . .
 
@@ -50,7 +50,7 @@ COPY --from=builder /app/.next        ./.next
 COPY --from=builder /app/package*.json ./
 
 # Install production dependencies only
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm install --omit=dev && npm cache clean --force
 
 USER appuser
 
