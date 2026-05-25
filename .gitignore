@@ -1,0 +1,47 @@
+# Android
+*.apk
+*.aar
+*.ap_
+*.dex
+*.class
+bin/
+gen/
+local.properties
+.gradle/
+build/
+.idea/
+*.iml
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Gradle
+.gradle
+gradle-app.setting
+!gradle-wrapper.jar
+.gradletasknamecache
+
+# IDE
+.idea/
+.vscode/
+*.iws
+*.ipr
+
+# Build
+build/
+.gradle/
+target/
+
+# Local configuration
+local.properties
+
+# Log
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Firebase
+google-services.json
