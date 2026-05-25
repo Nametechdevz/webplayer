@@ -4,11 +4,13 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.background
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.navigation.compose.rememberNavController
 import com.movix.core.ui.theme.MovixTheme
-import com.movix.feature.home.presentation.HomeScreen
+import com.movix.ui.MainScreen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -19,8 +21,12 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             MovixTheme {
-                Surface(color = Color.Black) {
-                    HomeScreen()
+                val navController = rememberNavController()
+                Surface(
+                    modifier = Modifier
+                        .background(Color.Black)
+                ) {
+                    MainScreen(navController = navController)
                 }
             }
         }

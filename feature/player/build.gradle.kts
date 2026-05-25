@@ -45,4 +45,18 @@ dependencies {
     val hiltVersion = rootProject.ext.get("hiltVersion") as String
     implementation("com.google.dagger:hilt-android:$hiltVersion")
     kapt("com.google.dagger:hilt-compiler:$hiltVersion")
+
+    // Media3 / ExoPlayer
+    val media3Version = rootProject.ext.get("media3Version") as String
+    implementation("androidx.media3:media3-exoplayer:$media3Version")
+    implementation("androidx.media3:media3-ui:$media3Version")
+    implementation("androidx.media3:media3-common:$media3Version")
+
+    // Lifecycle
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.2")
+
+    // Coroutines
+    val coroutinesVersion = rootProject.ext.get("coroutinesVersion") as String
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesVersion")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutinesVersion")
 }

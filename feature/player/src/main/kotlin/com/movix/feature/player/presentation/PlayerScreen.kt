@@ -1,70 +1,69 @@
 package com.movix.feature.player.presentation
 
+import android.view.ViewGroup
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material.icons.filled.PlayArrow
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.ViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-
-@HiltViewModel
-class PlayerViewModel @Inject constructor(
-    savedStateHandle: SavedStateHandle
-) : ViewModel() {
-    val movieId: Int? = savedStateHandle["movieId"]
-    val movieTitle: String? = savedStateHandle["title"]
-}
+import androidx.compose.ui.viewinterop.AndroidView
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.media3.ui.PlayerView
+import com.movix.core.ui.component.ErrorMessage
+import com.movix.core.ui.component.LoadingIndicator
 
 @Composable
 fun PlayerScreen(
+    viewModel: PlayerViewModel = hiltViewModel(),
     onBackClick: () -> Unit = {}
 ) {
-    var isPlaying by remember { mutableStateOf(false) }
-    var showControls by remember { mutableStateOf(true) }
+    val playerState by viewModel.playerState.collectAsState()
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(Color.Black)
     ) {
-        // Video area (placeholder)
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color.DarkGray),
-            contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = "📽️ Área de reproducción",
-                style = MaterialTheme.typography.headlineMedium,
-                color = Color.White
-            )
-        }
+        when (playerState) {
+            is PlayerViewModel.PlayerState.Preparing -> {
+                LoadingIndicator(message = "Preparando video...")
+            }
+            is PlayerViewModel.PlayerState.Error -> {
+                val error = (playerState as PlayerViewModel.PlayerState.Error).message
+                ErrorMessage(
+                    message = error,
+                    onRetry = { /* Reintentar */ }
+                )
+            }
+            else -> {
+                // ExoPlayer View
+                AndroidView(
+                    factory = { ctx ->
+                        PlayerView(ctx).apply {
+                            player = viewModel.getExoPlayer()
+                            useController = true
+                            controllerShowTimeoutMs = 5000
+                            controllerHideTimeoutMs = 5000
+                        }
+                    },
+                    modifier = Modifier.fillMaxSize()
+                )
 
-        // Controls
-        if (showControls) {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.Start
-            ) {
-                // Top bar
+                // Top controls
                 Row(
-                    modifier = Modifier.fillMaxWidth(),
+                    modifier = Modifier
+                        .align(Alignment.TopStart)
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .background(Color.Black.copy(alpha = 0.3f)),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
@@ -76,71 +75,27 @@ fun PlayerScreen(
                             modifier = Modifier.size(28.dp)
                         )
                     }
-                }
 
-                // Center play button
-                Box(
-                    modifier = Modifier
-                        .align(Alignment.CenterHorizontally)
-                        .padding(16.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    if (!isPlaying) {
-                        IconButton(
-                            onClick = { isPlaying = true },
-                            modifier = Modifier.size(80.dp)
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.PlayArrow,
-                                contentDescription = "Reproducir",
-                                tint = Color.White,
-                                modifier = Modifier.size(64.dp)
-                            )
-                        }
-                    }
-                }
+                    Text(
+                        text = viewModel.movieTitle ?: "Reproducción",
+                        style = MaterialTheme.typography.titleMedium,
+                        color = Color.White,
+                        modifier = Modifier.weight(1f).padding(horizontal = 8.dp)
+                    )
 
-                // Bottom controls
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(bottom = 16.dp)
-                ) {
-                    // Progress bar
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(4.dp)
-                            .background(Color.Gray)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .fillMaxWidth(0.35f)
-                                .height(4.dp)
-                                .background(Color.Red)
-                        )
-                    }
-
-                    // Time display
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 8.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
-                    ) {
-                        Text(
-                            text = "34:12",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color.White
-                        )
-                        Text(
-                            text = "98:45",
-                            style = MaterialTheme.typography.labelSmall,
-                            color = Color.Gray
+                    IconButton(onClick = { /* Settings */ }) {
+                        Icon(
+                            imageVector = Icons.Default.Settings,
+                            contentDescription = "Configuración",
+                            tint = Color.White
                         )
                     }
                 }
             }
         }
+    }
+
+    LaunchedEffect(Unit) {
+        viewModel.play()
     }
 }
