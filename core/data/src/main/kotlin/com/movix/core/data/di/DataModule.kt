@@ -10,9 +10,11 @@ import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 import com.movix.core.data.local.db.MovixDatabase
 import com.movix.core.data.local.dao.*
+import com.movix.core.data.repository.FavoriteRepository
 import com.movix.core.data.repository.MovieRepository
 import com.movix.core.data.repository.SearchRepository
 import com.movix.core.data.repository.TvShowRepository
+import com.movix.core.data.repository.impl.FavoriteRepositoryImpl
 import com.movix.core.data.repository.impl.MovieRepositoryImpl
 import com.movix.core.data.repository.impl.SearchRepositoryImpl
 import com.movix.core.data.repository.impl.TvShowRepositoryImpl
@@ -89,5 +91,14 @@ object DataModule {
         searchHistoryDao: SearchHistoryDao
     ): SearchRepository {
         return SearchRepositoryImpl(apiService, searchHistoryDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideFavoriteRepository(
+        favoriteDao: FavoriteDao,
+        watchlistDao: WatchlistDao
+    ): FavoriteRepository {
+        return FavoriteRepositoryImpl(favoriteDao, watchlistDao)
     }
 }
