@@ -12,7 +12,8 @@ import com.movix.core.data.local.dao.*
         MovieEntity::class,
         TvShowEntity::class,
         FavoriteEntity::class,
-        WatchlistEntity::class
+        WatchlistEntity::class,
+        SearchHistoryEntity::class
     ],
     version = 1,
     exportSchema = true
@@ -22,6 +23,7 @@ abstract class MovixDatabase : RoomDatabase() {
     abstract fun tvShowDao(): TvShowDao
     abstract fun favoriteDao(): FavoriteDao
     abstract fun watchlistDao(): WatchlistDao
+    abstract fun searchHistoryDao(): SearchHistoryDao
 
     companion object {
         private var INSTANCE: MovixDatabase? = null

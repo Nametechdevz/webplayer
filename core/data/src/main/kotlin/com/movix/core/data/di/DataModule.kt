@@ -11,8 +11,10 @@ import javax.inject.Singleton
 import com.movix.core.data.local.db.MovixDatabase
 import com.movix.core.data.local.dao.*
 import com.movix.core.data.repository.MovieRepository
+import com.movix.core.data.repository.SearchRepository
 import com.movix.core.data.repository.TvShowRepository
 import com.movix.core.data.repository.impl.MovieRepositoryImpl
+import com.movix.core.data.repository.impl.SearchRepositoryImpl
 import com.movix.core.data.repository.impl.TvShowRepositoryImpl
 import com.movix.core.network.api.TmdbApiService
 
@@ -58,6 +60,12 @@ object DataModule {
 
     @Provides
     @Singleton
+    fun provideSearchHistoryDao(database: MovixDatabase): SearchHistoryDao {
+        return database.searchHistoryDao()
+    }
+
+    @Provides
+    @Singleton
     fun provideMovieRepository(
         apiService: TmdbApiService,
         movieDao: MovieDao
@@ -72,5 +80,14 @@ object DataModule {
         tvShowDao: TvShowDao
     ): TvShowRepository {
         return TvShowRepositoryImpl(apiService, tvShowDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideSearchRepository(
+        apiService: TmdbApiService,
+        searchHistoryDao: SearchHistoryDao
+    ): SearchRepository {
+        return SearchRepositoryImpl(apiService, searchHistoryDao)
     }
 }
