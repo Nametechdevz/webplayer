@@ -11,7 +11,9 @@ import javax.inject.Singleton
 import com.movix.core.data.local.db.MovixDatabase
 import com.movix.core.data.local.dao.*
 import com.movix.core.data.repository.MovieRepository
+import com.movix.core.data.repository.TvShowRepository
 import com.movix.core.data.repository.impl.MovieRepositoryImpl
+import com.movix.core.data.repository.impl.TvShowRepositoryImpl
 import com.movix.core.network.api.TmdbApiService
 
 @Module
@@ -61,5 +63,14 @@ object DataModule {
         movieDao: MovieDao
     ): MovieRepository {
         return MovieRepositoryImpl(apiService, movieDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideTvShowRepository(
+        apiService: TmdbApiService,
+        tvShowDao: TvShowDao
+    ): TvShowRepository {
+        return TvShowRepositoryImpl(apiService, tvShowDao)
     }
 }
