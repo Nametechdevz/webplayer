@@ -1,0 +1,194 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: Crypto Payment Gateway 1.0.0\n"
+"Report-Msgid-Bugs-To: support@gateway.example.com\n"
+"POT-Creation-Date: 2024-06-01 00:00:00+0000\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+
+#: crypto-payment-gateway.php:8
+msgid "Crypto Payment Gateway - USDT (TRC20)"
+msgstr ""
+
+#: crypto-payment-gateway.php:9
+msgid "Pasarela de pagos en USDT (TRC20) blockchain TRON para WooCommerce"
+msgstr ""
+
+#: includes/class-crypto-gateway.php:50
+msgid "Configurar"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:18
+msgid "Crypto Payment Gateway (USDT)"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:19
+msgid "Paga con USDT (TRC20) en blockchain TRON"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:40
+msgid "Habilitar/Deshabilitar"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:42
+msgid "Habilitar Crypto Payment Gateway"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:46
+msgid "Título"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:47
+msgid "Título que verá el cliente en checkout"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:52
+msgid "Descripción"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:54
+msgid "Descripción del método de pago"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:58
+msgid "URL del Gateway"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:60
+msgid "URL base de tu pasarela de pagos"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:66
+msgid "API Key del Merchant"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:68
+msgid "Tu clave API del merchant"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:72
+msgid "Webhook Secret"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:74
+msgid "Secreto para validar webhooks"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:83
+msgid "Gateway no configurado correctamente"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:92
+msgid "No se pudo crear la orden de pago"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:106
+msgid "Esperando confirmación de pago en blockchain"
+msgstr ""
+
+#: includes/class-wc-gateway-crypto-usdt.php:114
+msgid "Error: "
+msgstr ""
+
+#: templates/payment-instructions.php:11
+msgid "Envía tu pago en USDT (TRC20)"
+msgstr ""
+
+#: templates/payment-instructions.php:12
+msgid "Completa tu pago siguiendo los pasos a continuación"
+msgstr ""
+
+#: templates/payment-instructions.php:17
+msgid "Dirección de Pago:"
+msgstr ""
+
+#: templates/payment-instructions.php:21
+msgid "Copiar"
+msgstr ""
+
+#: templates/payment-instructions.php:26
+msgid "Monto a Enviar:"
+msgstr ""
+
+#: templates/payment-instructions.php:31
+msgid "Tiempo Restante:"
+msgstr ""
+
+#: templates/payment-instructions.php:37
+msgid "O escanea este código QR con tu wallet TRON"
+msgstr ""
+
+#: templates/payment-instructions.php:42
+msgid "Pasos para completar el pago:"
+msgstr ""
+
+#: templates/payment-instructions.php:44
+msgid "Abre tu wallet TRON (TronLink, Ledger, Coinbase Wallet, etc.)"
+msgstr ""
+
+#: templates/payment-instructions.php:45
+msgid "Selecciona \"Enviar\" y elige USDT"
+msgstr ""
+
+#: templates/payment-instructions.php:46
+msgid "Pega la dirección de pago arriba"
+msgstr ""
+
+#: templates/payment-instructions.php:47
+msgid "Ingresa el monto exacto: <strong>%s USDT</strong>"
+msgstr ""
+
+#: templates/payment-instructions.php:48
+msgid "Revisa bien la dirección y el monto"
+msgstr ""
+
+#: templates/payment-instructions.php:49
+msgid "Confirma y envía la transacción"
+msgstr ""
+
+#: templates/payment-instructions.php:50
+msgid "¡Esperaremos confirmación en blockchain! ⏳"
+msgstr ""
+
+#: templates/payment-instructions.php:55
+msgid "ℹ️ Información:"
+msgstr ""
+
+#: templates/payment-instructions.php:56
+msgid "Recibirás una confirmación automática cuando se confirme el pago en la blockchain TRON."
+msgstr ""
+
+#: templates/payment-instructions.php:60
+msgid "⚠️ Importante:"
+msgstr ""
+
+#: templates/payment-instructions.php:61
+msgid "Este enlace de pago expirará en <span id=\"time-remaining\">15 minutos</span>. Si no envías el pago a tiempo, deberás crear un nuevo pedido."
+msgstr ""
+
+#: templates/payment-instructions.php:287
+msgid "¡Copiado!"
+msgstr ""
+
+#: templates/payment-instructions.php:293
+msgid "Error al copiar"
+msgstr ""
+
+#: templates/payment-instructions.php:301
+msgid "Expirado"
+msgstr ""
+
+#: templates/payment-instructions.php:309
+msgid "minutos"
+msgstr ""
+
+#: templates/payment-instructions.php:311
+msgid "segundos"
+msgstr ""

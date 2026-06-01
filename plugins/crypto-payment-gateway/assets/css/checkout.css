@@ -1,0 +1,93 @@
+/* Crypto Payment Gateway Checkout Styles */
+
+.woocommerce-notice.woocommerce-notice--info {
+    background-color: #e3f2fd;
+    border-color: #2196f3;
+    color: #1565c0;
+    padding: 12px 20px;
+    border-radius: 4px;
+    margin-bottom: 20px;
+}
+
+.payment_method_crypto_usdt_gateway {
+    padding: 20px;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin: 20px 0;
+    background: #f9f9f9;
+}
+
+.payment_method_crypto_usdt_gateway .payment_method_title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.payment_method_crypto_usdt_gateway .payment_method_title:before {
+    content: "₿";
+    font-size: 24px;
+    color: #0066cc;
+}
+
+.payment_method_crypto_usdt_gateway .payment_method_description {
+    color: #666;
+    font-size: 14px;
+    margin-top: 10px;
+    line-height: 1.6;
+}
+
+/* Loading state */
+.crypto-gateway-loading {
+    display: inline-block;
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+.crypto-gateway-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid #f3f3f3;
+    border-top: 3px solid #0066cc;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Error message */
+.crypto-gateway-error {
+    color: #d9534f;
+    background: #f2dede;
+    border: 1px solid #ebcccc;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+/* Success message */
+.crypto-gateway-success {
+    color: #3c763d;
+    background: #dff0d8;
+    border: 1px solid #d6e9c6;
+    padding: 12px;
+    border-radius: 4px;
+    margin: 10px 0;
+}
+
+@media (max-width: 768px) {
+    .payment_method_crypto_usdt_gateway {
+        padding: 15px;
+    }
+
+    .payment_method_crypto_usdt_gateway .payment_method_title {
+        font-size: 16px;
+    }
+}
